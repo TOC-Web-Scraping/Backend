@@ -1,4 +1,4 @@
-
+import { Player } from './';
 interface Achievement {
     date: string;
     placement: string;
@@ -14,4 +14,5 @@ export default interface Team {
     totalWinnings: number;
     achievements: Achievement[];
     url: string;
+    players: Player[];
 }
