@@ -2,10 +2,10 @@ import { Request, Response } from 'express';
 import { Team, Player } from '../models';
 import fetch from 'cross-fetch';
 
-async function getAllTeams(req: Request, res: Response) {
+async function getTeams(req: Request, res: Response) {
     try {
         const search: string = String(req.query.search);
-        if (!search) {
+        if (search === '' || search === 'undefined') {
             const response = await fetch('https://toc-web-scraping.github.io/scraping/data/teams.json');
             const teams: Team[] = await response.json();
             res.status(200).send(teams);
@@ -55,7 +55,7 @@ async function getTeamById(req: Request, res: Response) {
 
 
 export default {
-    getAllTeams,
+    getTeams,
     getTeamById,
 
 }
