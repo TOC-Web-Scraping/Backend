@@ -13,7 +13,7 @@ async function getPlayers(req: Request, res: Response) {
             const response = await fetch('https://toc-web-scraping.github.io/scraping/data/players.json');
             const players: Player[] = await response.json();
             const filteredPlayers = players.filter((player) => {
-                return player.name.toLowerCase().includes(search.toLowerCase()) || player.realName.toLowerCase().includes(search.toLowerCase()) || player.team.toLowerCase().includes(search.toLowerCase());
+                return player.name?.toLowerCase().includes(search.toLowerCase()) || player.realName?.toLowerCase().includes(search.toLowerCase()) || player.team?.toLowerCase().includes(search.toLowerCase());
             });
             res.status(200).send(filteredPlayers);
         }
