@@ -1,4 +1,4 @@
-
+import { Match } from './'
 export default interface Player {
     url: string;
     name: string;
@@ -9,5 +9,5 @@ export default interface Player {
     born: string;
     mainAgent: string[];
     gamingGear: any;
-
+    matches: Match[];
 }
