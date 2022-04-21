@@ -2,7 +2,7 @@ interface Ability {
     name: string;
     imageUrl: string;
     type: string;
-    topDescription: string;
+    topDescription: string[];
     bottomDescription:string;
     cost: string;
 }

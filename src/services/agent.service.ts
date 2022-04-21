@@ -5,6 +5,7 @@ async function getAgentsService(search: string) {
         if (search === '' || search === 'undefined') {
             const response = await fetch('https://toc-web-scraping.github.io/scraping/data/agents.json');
             const agents: Agent[] = await response.json();
+            await filerString(agents);
             return agents;
         } else {
             const response = await fetch('https://toc-web-scraping.github.io/scraping/data/agents.json');
@@ -17,7 +18,7 @@ async function getAgentsService(search: string) {
                }
                 return agent.name.toLowerCase().includes(search.toLowerCase())|| agent.country.toLowerCase().includes(search.toLowerCase()) || agent.role.toLowerCase().includes(search.toLowerCase()) ||abilities;
             });
-
+            await filerString(filteredAgents);
             return filteredAgents;
 
         }
@@ -27,9 +28,23 @@ async function getAgentByIdService(agentId:string ) {
 
         const response = await fetch('https://toc-web-scraping.github.io/scraping/data/agents.json');
         const agents: Agent[] = await response.json();
+        await filerString(agents);
         const agent = agents.find(t => t.name === agentId);
         return agent;
 
+}
+
+async function filerString(agents:Agent[]){
+    agents.forEach(agent => {
+        agent.abilities.forEach(ability => {
+            ability.topDescription=String(ability.topDescription).split(/(?:<.*?>)+|(?:\r\n|\r|\n)+|(?:\:)/gm) ;
+            ability.topDescription=ability.topDescription.filter(function(str) {
+                return /\S/.test(str);
+            });
+            ability.bottomDescription=ability.bottomDescription.replace(/<.*?>/gm,'')
+        });;
+    });
+    
 }
 export default {
     getAgentsService,
