@@ -5,5 +5,4 @@ const router: Router = Router();
 
 router.use('/teams', TeamRouter);
 
-
 export default router;
