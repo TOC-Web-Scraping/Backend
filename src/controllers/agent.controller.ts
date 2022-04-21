@@ -17,22 +17,7 @@ async function getAgents(req: Request, res: Response) {
 
 }
 
-async function getAgentById(req: Request, res: Response) {
-    try {
-        const agentId: string = String(req.params.id);
-        const agent =await AgentService.getAgentByIdService(agentId);
-        if (agent) {
-            res.status(200).send(agent);
-        } else {
-            res.status(404).send({ message: 'Agent not found' });
-        }
-        
-    } catch (err: any) {
-        res.status(500).json({ message: err.message });
-    }
-}
 export default {
-    getAgents,
-    getAgentById,
+    getAgents
 
 }

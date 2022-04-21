@@ -5,6 +5,7 @@ interface Ability {
     topDescription: string[];
     bottomDescription:string;
     cost: string;
+    ultimateCost:string;
 }
 
 export default interface Agent {

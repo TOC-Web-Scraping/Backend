@@ -24,30 +24,35 @@ async function getAgentsService(search: string) {
         }
         return null;
 }
-async function getAgentByIdService(agentId:string ) {
-
-        const response = await fetch('https://toc-web-scraping.github.io/scraping/data/agents.json');
-        const agents: Agent[] = await response.json();
-        await filerString(agents);
-        const agent = agents.find(t => t.name === agentId);
-        return agent;
-
-}
 
 async function filerString(agents:Agent[]){
     agents.forEach(agent => {
         agent.abilities.forEach(ability => {
+
             ability.topDescription=String(ability.topDescription).split(/(?:<.*?>)+|(?:\r\n|\r|\n)+|(?:\:)/gm) ;
             ability.topDescription=ability.topDescription.filter(function(str) {
                 return /\S/.test(str);
             });
+
+            for(var i=0;i<ability.topDescription.length;i++){
+                ability.topDescription[i]=ability.topDescription[i].replace(/^\s/gm,'');
+            }
             ability.bottomDescription=ability.bottomDescription.replace(/<.*?>/gm,'')
+
+            ability.type=ability.type.replace(/ <.*?>/gm,'')
+
+            if(ability.cost){
+            ability.cost=ability.cost.replace(/^\s/gm,'');
+            }
+            if(ability.ultimateCost){
+                ability.ultimateCost=ability.ultimateCost.replace(/^\s/gm,'');
+            }
         });;
     });
     
 }
 export default {
     getAgentsService,
-    getAgentByIdService,
+
 
 }
