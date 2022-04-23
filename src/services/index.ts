@@ -1,1 +1,0 @@
-export { default as AgentService } from './agent.service';

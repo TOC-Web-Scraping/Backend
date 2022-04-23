@@ -1,4 +1,23 @@
-export default interface Match {
+import mongoose from 'mongoose';
+
+const { Schema } = mongoose;
+
+const matchSchema = new Schema({
+  player: String,
+  date: String,
+  tournament: String,
+  map: String,
+  kill: String,
+  death: String,
+  assist: String,
+  team1: String,
+  team2: String,
+  agents1: [String],
+  agents2: [String],
+  score: String,
+});
+
+export type MatchDocument = mongoose.Document & {
   player: string;
   date: string;
   tournament: string;
@@ -11,4 +30,6 @@ export default interface Match {
   agents1: string[];
   agents2: string[];
   score: string;
-}
+};
+
+export const Match = mongoose.model<MatchDocument>('Match', matchSchema);

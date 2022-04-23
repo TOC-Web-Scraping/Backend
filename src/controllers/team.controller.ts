@@ -1,59 +1,70 @@
 import { Request, Response } from 'express';
-import { PlayerRepository, TeamRepository } from '../repositorys';
+import { Team } from '../models';
 
-async function getAllTeams(req: Request, res: Response) {
-  try {
-    const teams = await TeamRepository.getTeams(+req.params.limit, +req.params.offset);
-    res.status(200).send(teams);
-  } catch (err: any) {
-    res.status(500).json({ message: err.message });
-  }
+interface TeamFilters {
+  name?: string;
+  region?: string;
+  local?: string;
 }
 
 async function getTeams(req: Request, res: Response) {
   try {
-    const search: string = String(req.query.search);
-    if (search === '' || search === 'undefined') {
-      const response = await fetch('https://toc-web-scraping.github.io/scraping/data/teams.json');
-      const teams: Team[] = await response.json();
-      res.status(200).send(teams);
-    } else {
-      const response = await fetch('https://toc-web-scraping.github.io/scraping/data/teams.json');
-      const teams: Team[] = await response.json();
-      const filteredTeams = teams.filter((team) => {
-        return (
-          team.name.toLowerCase().includes(search.toLowerCase()) ||
-          team.region.toLowerCase().includes(search.toLowerCase()) ||
-          team.location.toLowerCase().includes(search.toLowerCase())
-        );
-      });
-      res.status(200).send(filteredTeams);
+    const pageID = req.query.pageID as string;
+    const pageSize = req.query.pageSize as string;
+    const name = req.query.name as string;
+    const region = req.query.region as string;
+    const local = req.query.local as string;
+    const filterValues: TeamFilters = { name, region, local };
+    const filters: TeamFilters = {};
+
+    Object.keys(filterValues).forEach((key) => {
+      const tkey = key as keyof TeamFilters;
+      if (filterValues[tkey]) {
+        filters[tkey] = filterValues[tkey];
+      }
+    });
+
+    let query = Team.find(filters);
+
+    if (pageID && pageSize) {
+      query = query.skip((+pageID - 1) * +pageSize).limit(+pageSize);
     }
+    const result = await query;
+    res.status(200).json(result);
   } catch (err: any) {
     res.status(500).json({ message: err.message });
-  }
-}
-
-async function getPlayersByTeam(team: string) {
-  try {
-    const response = await fetch('https://toc-web-scraping.github.io/scraping/data/players.json');
-    const players: Player[] = await response.json();
-    const teamPlayers = players.filter((p) => p.team === team);
-    return teamPlayers;
-  } catch (err: any) {
-    return [];
   }
 }
 
 async function getTeamById(req: Request, res: Response) {
   try {
-    const team = await TeamRepository.getTeamById(req.params.id);
-    if (team) {
-      const teamPlayers = await PlayerRepository.getPlayersByTeam(team.url);
-      team.players = teamPlayers;
-      res.status(200).send(team);
+    const team = await Team.aggregate([
+      {
+        $match: {
+          url: req.params.id,
+        },
+      },
+      {
+        $limit: 1,
+      },
+      {
+        $lookup: {
+          localField: 'url',
+          from: 'players',
+          foreignField: 'team',
+          as: 'players',
+        },
+      },
+      {
+        $project: {
+          'players._id': 0,
+        },
+      },
+    ]);
+    if (team.length > 0) {
+      res.status(200).json(team);
     } else {
-      res.status(404).send({ message: 'Team not found' });
+      res.status(404).json({ message: 'Team not found' });
     }
   } catch (err: any) {
     res.status(500).json({ message: err.message });
@@ -61,7 +72,6 @@ async function getTeamById(req: Request, res: Response) {
 }
 
 export default {
-  getAllTeams,
   getTeamById,
   getTeams,
 };

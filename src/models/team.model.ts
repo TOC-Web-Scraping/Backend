@@ -1,19 +1,37 @@
-import { Player } from '.';
+import mongoose from 'mongoose';
 
-interface Achievement {
-  date: string;
-  placement: string;
-  tournament: string;
-  prize: string;
-}
+const { Schema } = mongoose;
 
-export default interface Team {
+const teamSchema = new Schema({
+  name: String,
+  location: String,
+  logo: String,
+  region: String,
+  totalWinnings: Number,
+  achievements: [
+    {
+      date: String,
+      placement: String,
+      tournamanet: String,
+      prize: String,
+    },
+  ],
+  url: String,
+});
+
+export type TeamDocument = mongoose.Document & {
   name: string;
   location: string;
   logo: string;
   region: string;
   totalWinnings: number;
-  achievements: Achievement[];
+  achievements: {
+    date: string;
+    placement: string;
+    tournament: string;
+    prize: string;
+  }[];
   url: string;
-  players: Player[];
-}
+};
+
+export const Team = mongoose.model<TeamDocument>('Team', teamSchema);
