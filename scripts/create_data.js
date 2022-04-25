@@ -29,9 +29,9 @@ MongoClient.connect(process.env.MONGODB_URI, async (err, db) => {
 
   const matchs = await getData(MATCH_URL);
   db.collection('matchs').insertMany(matchs);
-  console.log('Insert matchs successful');
+  console.log('Insert matchs data successful');
 
   const agents = await getData(AGENT_URL);
   db.collection('agents').insertMany(agents);
-  console.log('Insert agents successful');
+  console.log('Insert agents data successful');
 });
