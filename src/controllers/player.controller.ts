@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { cache } from '../middlewares/cache';
 import { Player } from '../models';
 
 interface PlayerFilters {
@@ -29,7 +30,11 @@ async function getPlayers(req: Request, res: Response) {
       query = query.skip((+pageID - 1) * +pageSize).limit(+pageSize);
     }
     const result = await query;
-    res.status(200).json(result);
+    const jsonResult = result.map((r) => r.toJSON());
+
+    cache.set(req.originalUrl, jsonResult, 60);
+
+    res.status(200).json(jsonResult);
   } catch (err: any) {
     res.status(500).json({ message: err.message });
   }
@@ -62,7 +67,8 @@ async function getPlayerById(req: Request, res: Response) {
       },
     ]);
     if (player.length > 0) {
-      res.status(200).json(player);
+      cache.set(req.originalUrl, player[0], 60);
+      res.status(200).json(player[0]);
     } else {
       res.status(404).json({ message: 'Player not found' });
     }

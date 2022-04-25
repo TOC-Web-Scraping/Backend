@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { Team } from '../models';
+import { cache } from '../middlewares/cache';
 
 interface TeamFilters {
   name?: string;
@@ -29,7 +30,12 @@ async function getTeams(req: Request, res: Response) {
     if (pageID && pageSize) {
       query = query.skip((+pageID - 1) * +pageSize).limit(+pageSize);
     }
+
     const result = await query;
+    const jsonResult = result.map((r) => r.toJSON());
+
+    cache.set(req.originalUrl, jsonResult, 60);
+
     res.status(200).json(result);
   } catch (err: any) {
     res.status(500).json({ message: err.message });
@@ -61,8 +67,10 @@ async function getTeamById(req: Request, res: Response) {
         },
       },
     ]);
+
     if (team.length > 0) {
-      res.status(200).json(team);
+      cache.set(req.originalUrl, team[0], 60);
+      res.status(200).json(team[0]);
     } else {
       res.status(404).json({ message: 'Team not found' });
     }
