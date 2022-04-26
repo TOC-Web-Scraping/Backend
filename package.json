@@ -9,7 +9,8 @@
     "build": "tsc",
     "start": "node ./dist/server.js",
     "format": "prettier --config .prettierrc.json --write src/**/*.ts",
-    "db:create": "node scripts/create_data.js"
+    "db:create": "node scripts/create_data.js",
+    "db:delete": "node scripts/delete_data.js"
   },
   "repository": {
     "type": "git",
