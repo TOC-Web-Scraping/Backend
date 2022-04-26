@@ -29,14 +29,22 @@ async function filerString(agents:Agent[]){
     agents.forEach(agent => {
         agent.abilities.forEach(ability => {
 
-            ability.topDescription=String(ability.topDescription).split(/(?:<.*?>)+|(?:\r\n|\r|\n)+|(?:\:)/gm) ;
-            ability.topDescription=ability.topDescription.filter(function(str) {
+            var topDescriptionTemp=String(ability.topDescription).split(/(?:<.*?>)+|(?:\r\n|\r|\n)+|(?:\:)/gm) ;
+            topDescriptionTemp=topDescriptionTemp.filter(function(str) {
                 return /\S/.test(str);
             });
 
-            for(var i=0;i<ability.topDescription.length;i++){
-                ability.topDescription[i]=ability.topDescription[i].replace(/^\s/gm,'');
+            for(var i=0;i<topDescriptionTemp.length;i++){
+                topDescriptionTemp[i]=topDescriptionTemp[i].replace(/^\s/gm,'');
             }
+
+            var step=0;
+            var changeArrayToDict: {[key: string]: string}={};
+           while(step<topDescriptionTemp.length-1){
+            changeArrayToDict[topDescriptionTemp[step]]=topDescriptionTemp[step+1];
+                step+=2;
+            }
+            ability.topDescription=changeArrayToDict;
             ability.bottomDescription=ability.bottomDescription.replace(/<.*?>/gm,'')
 
             ability.type=ability.type.replace(/ <.*?>/gm,'')
@@ -51,6 +59,7 @@ async function filerString(agents:Agent[]){
     });
     
 }
+
 export default {
     getAgentsService,
 
