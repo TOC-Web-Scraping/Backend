@@ -36,7 +36,7 @@ async function getTeams(req: Request, res: Response) {
 
     cache.set(req.originalUrl, jsonResult, 60);
 
-    res.status(200).json(result);
+    res.status(200).json(jsonResult);
   } catch (err: any) {
     res.status(500).json({ message: err.message });
   }
