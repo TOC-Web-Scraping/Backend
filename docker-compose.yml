@@ -1,0 +1,19 @@
+version: '3'
+services:
+  app:
+    container_name: toc_api
+    env_file:
+      - .env
+    restart: always
+    build: .
+    ports:
+      - '${PORT}:${PORT}'
+    depends_on:
+      - mongo
+    entrypoint: ["/app/wait-for", "mongo:27017", "--", "/app/start.sh"]
+    command: ["npm", "start"]
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports:
+      - '27017:27017'
