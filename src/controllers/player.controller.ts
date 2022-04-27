@@ -69,7 +69,7 @@ async function getPlayerById(req: Request, res: Response) {
       },
       {
         $project: {
-          'matchs._id': 0,
+          'matches._id': 0,
         },
       },
     ]);
