@@ -23,6 +23,9 @@ MongoClient.connect(MONGODB_URI, async (err, client) => {
   await db.collection('agents').drop();
   console.log('Delete agents data successful');
 
+  await db.collection('maps').drop();
+  console.log('Delete maps data successful');
+
   await client.close();
   console.log('Close database connection...');
 });
