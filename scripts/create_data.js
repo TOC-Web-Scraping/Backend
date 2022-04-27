@@ -8,7 +8,7 @@ const PLAYER_URL = 'https://raw.githubusercontent.com/TOC-Web-Scraping/scraping/
 const TEAM_URL = 'https://raw.githubusercontent.com/TOC-Web-Scraping/scraping/main/data/teams.json';
 const MATCH_URL = 'https://raw.githubusercontent.com/TOC-Web-Scraping/scraping/main/data/matchs.json';
 const AGENT_URL = 'https://raw.githubusercontent.com/TOC-Web-Scraping/scraping/main/data/agents.json';
-const MAP_URL = 'https://raw.githubusercontent.com/TOC-Web-Scraping/scraping/main/data/map.json';
+const MAP_URL = 'https://raw.githubusercontent.com/TOC-Web-Scraping/scraping/main/data/maps.json';
 
 const { DATABASE_NAME, MONGODB_URI } = process.env;
 
