@@ -22,7 +22,7 @@ async function getPlayers(req: Request, res: Response) {
     let toQuery: FilterQuery<PlayerFilters>;
     if (search) {
       const pattern = new RegExp(search, 'i');
-      toQuery = { $or: [{ name: pattern }, { realName: pattern }, { team: pattern }] };
+      toQuery = { $or: [{ name: pattern }, { realName: pattern }, { team: pattern }, { country: pattern }] };
     } else {
       toQuery = {};
       if (country) {
