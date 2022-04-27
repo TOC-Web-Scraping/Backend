@@ -34,4 +34,4 @@ export type MatchDocument = mongoose.Document & {
   score: string;
 };
 
-export const Match = mongoose.model<MatchDocument>('Match', matchSchema, 'matchs');
+export const Match = mongoose.model<MatchDocument>('Match', matchSchema, 'matches');
