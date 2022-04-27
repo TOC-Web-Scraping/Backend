@@ -19,6 +19,11 @@ const teamSchema = new Schema({
   url: String,
 });
 
+teamSchema.index({ name: 1 }, { name: 'TeamNameIndex', collation: { locale: 'en', strength: 1 } });
+teamSchema.index({ region: 1 }, { name: 'TeamRegionIndex', collation: { locale: 'en', strength: 1 } });
+teamSchema.index({ location: 1 }, { name: 'TeamLocationIndex', collation: { locale: 'en', strength: 1 } });
+teamSchema.index({ url: 1 }, { name: 'TeamURLIndex', collation: { locale: 'en', strength: 1 } });
+
 export type TeamDocument = mongoose.Document & {
   name: string;
   location: string;
