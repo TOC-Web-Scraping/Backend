@@ -13,6 +13,7 @@ async function getValoMaps(req: Request, res: Response) {
   try {
     const pageID = req.query.pageID as string;
     const pageSize = req.query.pageSize as string;
+
     const mapName = req.query.mapName as string;
     const country = req.query.country as string;
     const bombSites = req.query.bombSites as string;
@@ -27,7 +28,7 @@ async function getValoMaps(req: Request, res: Response) {
       }
     });
 
-    let query = ValoMap.find(filters);
+    let query = ValoMap.find(filters).collation({ locale: 'en', strength: 1 });
     if (pageID && pageSize) {
       query = query.skip((+pageID - 1) * +pageSize).limit(+pageSize);
     }

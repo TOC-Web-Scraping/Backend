@@ -1,13 +1,15 @@
 import { Request, Response } from 'express';
 import { cache } from '../middlewares/cache';
-
+import AgentService from '../services/agent.service';
 import { Agent } from '../models';
 
 async function getAgents(req: Request, res: Response) {
   try {
     const query = Agent.find();
     const result = await query;
-    const jsonResult = result.map((r) => r.toJSON());
+    const filteredResult = AgentService.filterString(result);
+
+    const jsonResult = filteredResult.map((r) => r.toJSON());
 
     cache.set(req.originalUrl, jsonResult, 60);
 
