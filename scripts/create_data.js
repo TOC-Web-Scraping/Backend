@@ -41,7 +41,7 @@ MongoClient.connect(MONGODB_URI, async (err, client) => {
   console.log('Insert agents data successful');
 
   const maps = await getData(MAP_URL);
-  await db.collction('maps').insertMany(maps);
+  await db.collection('maps').insertOne(maps);
   console.log('Insert maps data successful');
 
   await client.close();
