@@ -21,3 +21,4 @@ export type ValoMapDocument = mongoose.Document & {
 };
 
 export const ValoMap = mongoose.model<ValoMapDocument>('ValoMap', valoMapSchema);
+ 

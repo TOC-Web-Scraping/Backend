@@ -6,4 +6,4 @@ const router = Router();
 
 router.get('/', cacheMiddleware, ValoMapController.getValoMaps);
 
-export default router;
+export default router; 
