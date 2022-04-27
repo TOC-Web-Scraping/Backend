@@ -62,7 +62,7 @@ async function getPlayerById(req: Request, res: Response) {
       {
         $lookup: {
           localField: 'url',
-          from: 'players',
+          from: 'matchs',
           foreignField: 'player',
           as: 'matchs',
         },
