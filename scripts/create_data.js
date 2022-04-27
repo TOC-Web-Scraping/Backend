@@ -32,9 +32,9 @@ MongoClient.connect(MONGODB_URI, async (err, client) => {
   await db.collection('teams').insertMany(teams);
   console.log('Insert teams data successful');
 
-  const matchs = await getData(MATCH_URL);
-  await db.collection('matches').insertMany(matchs);
-  console.log('Insert matchs data successful');
+  const matches = await getData(MATCH_URL);
+  await db.collection('matches').insertMany(matches);
+  console.log('Insert matches data successful');
 
   const agents = await getData(AGENT_URL);
   await db.collection('agents').insertMany(agents);

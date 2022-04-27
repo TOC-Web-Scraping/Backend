@@ -18,7 +18,7 @@ MongoClient.connect(MONGODB_URI, async (err, client) => {
   console.log('Delete teams data successful');
 
   await db.collection('matches').drop();
-  console.log('Delete matchs data successful');
+  console.log('Delete matches data successful');
 
   await db.collection('agents').drop();
   console.log('Delete agents data successful');
