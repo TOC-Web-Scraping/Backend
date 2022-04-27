@@ -4,6 +4,6 @@ import { cacheMiddleware } from '../middlewares/cache';
 
 const router = Router();
 
-router.get('/', cacheMiddleware, ValoMapController.getValoMap);
+router.get('/', cacheMiddleware, ValoMapController.getValoMaps);
 
 export default router;

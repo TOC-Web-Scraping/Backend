@@ -20,4 +20,4 @@ export type ValoMapDocument = mongoose.Document & {
   imageUrl: String;
 };
 
-export const ValoMap = mongoose.model<ValoMapDocument>('ValoMap', valoMapSchema, 'maps');
+export const ValoMap = mongoose.model<ValoMapDocument>('ValoMap', valoMapSchema, 'valomaps');
