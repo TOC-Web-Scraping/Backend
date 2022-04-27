@@ -8,16 +8,17 @@ const valoMapSchema = new Schema({
   releaseDate: String,
   bombSites: String,
   teleporters: String,
-  imageUrl: String,
+  imageUrl: [String],
 });
 
 export type ValoMapDocument = mongoose.Document & {
   mapName: String;
+  description: String,
   country: String;
   releaseDate: String;
   bombSites: String;
   teleporters: String;
-  imageUrl: String;
+  imageUrl: String[];
 };
 
 export const ValoMap = mongoose.model<ValoMapDocument>('ValoMap', valoMapSchema, 'valomaps');
