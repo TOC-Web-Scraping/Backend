@@ -9,7 +9,7 @@ interface ValoMapFilters {
     teleporters?: string;
 }
 
-async function getValoMap(req: Request, res: Response) {
+async function getValoMaps(req: Request, res: Response) {
     try {
         const pageID = req.query.pageID as string;
         const pageSize = req.query.pageSize as string;
@@ -43,5 +43,5 @@ async function getValoMap(req: Request, res: Response) {
 }
 
 export default {
-    getValoMap,
+    getValoMaps,
 };

@@ -7,7 +7,7 @@ const valoMapSchema = new Schema({
     country: String,
     releaseDate: String,
     bombSites: String,
-    teleporters: String,
+    teloporters: String,
     imageUrl: String
 });
 
@@ -16,7 +16,7 @@ export type ValoMapDocument = mongoose.Document & {
     country: String;
     releaseDate: String;
     bombSites: String;
-    teleporters: String;
+    teloporters: String;
     imageUrl: String;
 };
 
