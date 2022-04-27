@@ -17,13 +17,13 @@ MongoClient.connect(MONGODB_URI, async (err, client) => {
   await db.collection('teams').drop();
   console.log('Delete teams data successful');
 
-  await db.collection('matchs').drop();
+  await db.collection('matches').drop();
   console.log('Delete matchs data successful');
 
   await db.collection('agents').drop();
   console.log('Delete agents data successful');
 
-  await db.collection('maps').drop();
+  await db.collection('valomaps').drop();
   console.log('Delete maps data successful');
 
   await client.close();

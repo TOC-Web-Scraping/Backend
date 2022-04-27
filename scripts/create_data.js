@@ -33,7 +33,7 @@ MongoClient.connect(MONGODB_URI, async (err, client) => {
   console.log('Insert teams data successful');
 
   const matchs = await getData(MATCH_URL);
-  await db.collection('matchs').insertMany(matchs);
+  await db.collection('matches').insertMany(matchs);
   console.log('Insert matchs data successful');
 
   const agents = await getData(AGENT_URL);
@@ -41,7 +41,7 @@ MongoClient.connect(MONGODB_URI, async (err, client) => {
   console.log('Insert agents data successful');
 
   const maps = await getData(MAP_URL);
-  await db.collection('maps').insertMany(maps);
+  await db.collection('valomaps').insertMany(maps);
   console.log('Insert maps data successful');
 
   await client.close();
