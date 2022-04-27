@@ -1,31 +1,31 @@
 import { Request, Response } from 'express';
+import { FilterQuery } from 'mongoose';
 import { Team } from '../models';
 import { cache } from '../middlewares/cache';
 
 interface TeamFilters {
   name?: string;
   region?: string;
-  local?: string;
+  location?: string;
 }
 
 async function getTeams(req: Request, res: Response) {
   try {
     const pageID = req.query.pageID as string;
     const pageSize = req.query.pageSize as string;
-    const name = req.query.name as string;
+
+    const search = req.query.search as string;
     const region = req.query.region as string;
-    const local = req.query.local as string;
-    const filterValues: TeamFilters = { name, region, local };
-    const filters: TeamFilters = {};
 
-    Object.keys(filterValues).forEach((key) => {
-      const tkey = key as keyof TeamFilters;
-      if (filterValues[tkey]) {
-        filters[tkey] = filterValues[tkey];
-      }
-    });
+    let toQuery: FilterQuery<TeamFilters> = {};
+    if (search) {
+      const pattern = new RegExp(search, 'i');
+      toQuery = { $or: [{ name: pattern }, { region: pattern }, { location: pattern }] };
+    } else if (region) {
+      toQuery.region = region;
+    }
 
-    let query = Team.find(filters);
+    let query = Team.find(toQuery).collation({ locale: 'en', strength: 1 });
 
     if (pageID && pageSize) {
       query = query.skip((+pageID - 1) * +pageSize).limit(+pageSize);

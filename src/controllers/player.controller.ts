@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { FilterQuery } from 'mongoose';
 import { cache } from '../middlewares/cache';
 import { Player } from '../models';
 
@@ -6,26 +7,33 @@ interface PlayerFilters {
   name?: string;
   realName?: string;
   team?: string;
+  country?: string;
 }
 
 async function getPlayers(req: Request, res: Response) {
   try {
     const pageID = req.query.pageID as string;
     const pageSize = req.query.pageSize as string;
-    const name = req.query.name as string;
-    const realName = req.query.realName as string;
+
+    const search = req.query.search as string;
+    const country = req.query.country as string;
     const team = req.query.team as string;
-    const filterValues: PlayerFilters = { name, realName, team };
-    const filters: PlayerFilters = {};
 
-    Object.keys(filterValues).forEach((key) => {
-      const tkey = key as keyof PlayerFilters;
-      if (filterValues[tkey]) {
-        filters[tkey] = filterValues[tkey];
+    let toQuery: FilterQuery<PlayerFilters>;
+    if (search) {
+      const pattern = new RegExp(search, 'i');
+      toQuery = { $or: [{ name: pattern }, { realName: pattern }, { team: pattern }] };
+    } else {
+      toQuery = {};
+      if (country) {
+        toQuery.country = country;
       }
-    });
+      if (team) {
+        toQuery.team = team;
+      }
+    }
 
-    let query = Player.find(filters);
+    let query = Player.find(toQuery).collation({ locale: 'en', strength: 1 });
     if (pageID && pageSize) {
       query = query.skip((+pageID - 1) * +pageSize).limit(+pageSize);
     }
@@ -42,7 +50,6 @@ async function getPlayers(req: Request, res: Response) {
 
 async function getPlayerById(req: Request, res: Response) {
   try {
-    // const player = await Player.findOne({ url: req.params.id });
     const player = await Player.aggregate([
       {
         $match: {

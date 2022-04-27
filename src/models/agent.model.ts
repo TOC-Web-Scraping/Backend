@@ -30,4 +30,4 @@ export type AgentDocument = mongoose.Document & {
   abilities: Ability[];
 };
 
-export const Agent = mongoose.model<AgentDocument>('Agent', agentSchema);
+export const Agent = mongoose.model<AgentDocument>('Agent', agentSchema, 'agents');

@@ -34,4 +34,4 @@ export type TeamDocument = mongoose.Document & {
   url: string;
 };
 
-export const Team = mongoose.model<TeamDocument>('Team', teamSchema);
+export const Team = mongoose.model<TeamDocument>('Team', teamSchema, 'teams');

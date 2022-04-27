@@ -17,6 +17,8 @@ const matchSchema = new Schema({
   score: String,
 });
 
+matchSchema.index({ player: 1 }, { name: 'MatchPlayerIndex', collation: { locale: 'en', strength: 1 } });
+
 export type MatchDocument = mongoose.Document & {
   player: string;
   date: string;
@@ -32,4 +34,4 @@ export type MatchDocument = mongoose.Document & {
   score: string;
 };
 
-export const Match = mongoose.model<MatchDocument>('Match', matchSchema);
+export const Match = mongoose.model<MatchDocument>('Match', matchSchema, 'matchs');

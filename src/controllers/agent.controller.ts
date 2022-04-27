@@ -5,11 +5,7 @@ import { Agent } from '../models';
 
 async function getAgents(req: Request, res: Response) {
   try {
-    const { pageID, pageSize } = req.query;
-    let query = Agent.find();
-    if (pageID && pageSize) {
-      query = query.skip((+pageID - 1) * +pageSize).limit(+pageSize);
-    }
+    const query = Agent.find();
     const result = await query;
     const jsonResult = result.map((r) => r.toJSON());
 
