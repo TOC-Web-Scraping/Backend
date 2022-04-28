@@ -1,15 +1,24 @@
+import { createServer } from 'http';
+import { ConnectOptions } from 'mongodb';
+import mongoose from 'mongoose';
 import app from './app';
-import { createServer } from "http";
-import dotenv from 'dotenv';
-dotenv.config();
+import { MONGODB_URI, PORT } from './config';
 
 const httpServer = createServer(app);
-const PORT = 8080;
+const DEFAULT_PORT = 8000;
 
-try {
-    httpServer.listen(process.env.PORT || PORT, (): void => {
-        console.log(`Connected successfully on port ${PORT}`);
+async function main() {
+  try {
+    console.log('Connecting to MongoDB');
+    await mongoose.connect(MONGODB_URI!, { useNewUrlParser: true, useUnifiedTopology: true } as ConnectOptions);
+
+    const usedPort = PORT || DEFAULT_PORT;
+    httpServer.listen(usedPort, (): void => {
+      console.log(`Connected successfully on port ${usedPort}`);
     });
-} catch (error: any) {
+  } catch (error: any) {
     console.error(`Error occured: ${error.message}`);
+  }
 }
+
+main();
