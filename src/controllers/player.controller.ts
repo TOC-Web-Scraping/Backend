@@ -83,7 +83,7 @@ async function getPlayerById(req: Request, res: Response) {
       let count: number = 0;
       //calculate
       playerJson.matches.forEach(
-        function (d: any) {
+        function (d: { [key: string]: string }) {
           avgkill += parseInt(d.kill);
           avgdeath += parseInt(d.death);
           avgassist += parseInt(d.assist);
