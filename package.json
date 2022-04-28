@@ -11,7 +11,7 @@
     "format": "prettier --config .prettierrc.json --write src/**/*.ts",
     "db:create": "node scripts/create_data.js",
     "db:delete": "node scripts/delete_data.js",
-    "db:update": "npm run db:delete ; npm run db:create"
+    "db:update": "npm run db:delete ; sleep 10 ;npm run db:create ; echo Database update is done"
   },
   "repository": {
     "type": "git",
