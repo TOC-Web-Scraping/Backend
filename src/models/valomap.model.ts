@@ -4,6 +4,7 @@ const { Schema } = mongoose;
 
 const valoMapSchema = new Schema({
   mapName: String,
+  description: String,
   country: String,
   releaseDate: String,
   bombSites: String,
