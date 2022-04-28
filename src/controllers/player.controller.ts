@@ -74,8 +74,36 @@ async function getPlayerById(req: Request, res: Response) {
       },
     ]);
     if (player.length > 0) {
-      cache.set(req.originalUrl, player[0], 60);
-      res.status(200).json(player[0]);
+      const playerJson = player[0];
+      //find kda//
+      //declare
+      let avgkill : number = 0;
+      let avgdeath : number = 0;
+      let avgassist : number = 0;
+      let count: number = 0;
+      //calculate
+      playerJson.matches.forEach(
+        function (d: any) {
+          avgkill += parseInt(d.kill);
+          avgdeath += parseInt(d.death);
+          avgassist += parseInt(d.assist);
+          count += 1;
+        }
+      );
+      if (count==0){
+        count = 1;
+      }
+      avgkill /= count;
+      avgdeath /= count;
+      avgassist /= count;
+      //assign data to json
+      playerJson.avgKill = avgkill.toFixed(2);
+      playerJson.avgDeath = avgdeath.toFixed(2);
+      playerJson.avgAssist = avgassist.toFixed(2);
+      //end find kda//
+      
+      cache.set(req.originalUrl, playerJson, 60);
+      res.status(200).json(playerJson);
     } else {
       res.status(404).json({ message: 'Player not found' });
     }

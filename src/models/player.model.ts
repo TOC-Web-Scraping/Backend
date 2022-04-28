@@ -12,6 +12,9 @@ const playerSchema = new Schema({
   born: String,
   mainAgent: [String],
   gamingGear: Schema.Types.Mixed,
+  avgKill: String,
+  avgDeath: String,
+  avgAssist: String,
 });
 
 playerSchema.index({ name: 1 }, { name: 'PlayerNameIndex', collation: { locale: 'en', strength: 1 } });
@@ -30,6 +33,11 @@ export type PlayerDocument = mongoose.Document & {
   born: string;
   mainAgent: string[];
   gamingGear: { [key: string]: any };
+  avgKill: string;
+  avgDeath: string;
+  avgAssist: string;
+  //กรณี find player by id จะมี matches ติดไปด้วย
+  //matches: array of Match object ที่เกี่ยวข้องกับผู้เล่นคนนั้น
 };
 
 export const Player = mongoose.model<PlayerDocument>('Player', playerSchema, 'players');
