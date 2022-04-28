@@ -44,7 +44,6 @@ async function getTeams(req: Request, res: Response) {
 
 async function getTeamById(req: Request, res: Response) {
   try {
-    const teamNameFromUrlUnAwait = Team.findOne({url:req.params.id},{name:1,_id:0});
     const teamUnAwait = Team.aggregate([
       {
         $match: {
@@ -108,12 +107,45 @@ async function getTeamById(req: Request, res: Response) {
         },
       },
     ]);
-    const teamNameFromUrl = await teamNameFromUrlUnAwait;
-    //const matchUnAwait = Match.find({'team1':});
+    let teamNameFromUrl : { [key: string]: any } | null = await Team.findOne({url:req.params.id},{name:1,_id:0});
+    let teamName : string = teamNameFromUrl?.name;
+    const score1UnAwait = Match.find({'team1':teamName},{_id:0,score:1});
+    const score2UnAwait = Match.find({'team2':teamName},{_id:0,score:1});
     const team = await teamUnAwait;
+    const score1 = await score1UnAwait;
+    const score2 = await score2UnAwait;
+    
     if (team.length > 0) {
-      cache.set(req.originalUrl, team[0], 60);
-      res.status(200).json(team[0]);
+      let winCount : number = 0;
+      let matchCount : number = 0;
+      if (score1 !== null) {
+        score1.forEach(
+          function (s : any) {
+            const temp = s.score.match(/13:/g);
+            if (temp?.length === 1){
+              winCount += 1;
+            }
+            matchCount += 1;
+          }
+        );
+      }
+
+      if (score2 !== null) {
+        score2.forEach(
+          function (s : any) {
+            const temp = s.score.match(/:13/g);
+            if (temp?.length === 1){
+              winCount += 1;
+            }
+            matchCount += 1;
+          }
+        );
+      }
+      const winrate : number = winCount / matchCount;
+      const teamJson = team[0]
+      teamJson.winrate = winrate.toString();
+      cache.set(req.originalUrl, teamJson, 60);
+      res.status(200).json(teamJson);
     } else {
       res.status(404).json({ message: 'Team not found' });
     }
