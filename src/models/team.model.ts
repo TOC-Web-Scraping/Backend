@@ -17,6 +17,7 @@ const teamSchema = new Schema({
     },
   ],
   url: String,
+  winrate: String,
 });
 
 teamSchema.index({ name: 1 }, { name: 'TeamNameIndex', collation: { locale: 'en', strength: 1 } });
@@ -37,6 +38,7 @@ export type TeamDocument = mongoose.Document & {
     prize: string;
   }[];
   url: string;
+  winrate: string;
 };
 
 export const Team = mongoose.model<TeamDocument>('Team', teamSchema, 'teams');
