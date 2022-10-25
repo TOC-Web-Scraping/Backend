@@ -25,11 +25,11 @@ async function main() {
 
     const usedPort = PORT || DEFAULT_PORT;
     httpServer.listen(usedPort, (): void => {
-      console.log(`HTTPS listen on port ${usedPort}`);
+      console.log(`HTTP listen on port ${usedPort}`);
     });
 
     httpsServer.listen(8443, (): void => {
-      console.log(`HTTP listen on port ${8443}`);
+      console.log(`HTTPS listen on port ${8443}`);
     });
   } catch (error: any) {
     console.error(`Error occured: ${error.message}`);
