@@ -1,10 +1,21 @@
-import { createServer } from 'http';
+import { createServer as createServerHttps } from 'https';
+import { createServer as createServerHttp } from 'http';
 import { ConnectOptions } from 'mongodb';
 import mongoose from 'mongoose';
+import fs from 'fs';
 import app from './app';
-import { MONGODB_URI, PORT } from './config';
+import { MONGODB_URI, PORT, KEY_PATH, CERT_PATH } from './config';
 
-const httpServer = createServer(app);
+const httpsServer = createServerHttps(
+  {
+    key: fs.readFileSync(KEY_PATH!),
+    cert: fs.readFileSync(CERT_PATH!),
+  },
+  app
+);
+
+const httpServer = createServerHttp(app);
+
 const DEFAULT_PORT = 8000;
 
 async function main() {
@@ -14,7 +25,11 @@ async function main() {
 
     const usedPort = PORT || DEFAULT_PORT;
     httpServer.listen(usedPort, (): void => {
-      console.log(`Connected successfully on port ${usedPort}`);
+      console.log(`HTTP listen on port ${usedPort}`);
+    });
+
+    httpsServer.listen(8443, (): void => {
+      console.log(`HTTPS listen on port ${8443}`);
     });
   } catch (error: any) {
     console.error(`Error occured: ${error.message}`);
